@@ -16,10 +16,11 @@ function buildMarkup(rawDraftContentState, markup) {
 
   var blocks = rawDraftContentState.blocks;
   return blocks.map(function convertBlock(block) {
-
+    console.log('BLOCK:', block)
     var outputText = [];
     var styleStack = [];
     var text = block.text;
+    var type = block.type
     var ranges = block.inlineStyleRanges;
 
     // loop over every char in this block's text
@@ -48,8 +49,13 @@ function buildMarkup(rawDraftContentState, markup) {
         outputText.push(markup[toRemove][1]);
       }
     }
-
-    return outputText.join('');
+    // add inline class declaration and span wrap when needed
+    if (type !== 'unstyled') {
+      return "<span class='" + type + "'>" + outputText.join('') + "</span>";
+    } else {
+      return outputText.join('')
+    }
+    
   });
 
 }
